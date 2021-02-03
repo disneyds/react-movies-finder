@@ -1,0 +1,9 @@
+.wrapper {
+  padding: 0 25px;
+  width: 100%;
+  min-height: 100vh;
+  background-color: rgb(41, 41, 41);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}

@@ -1,0 +1,32 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+a {
+  font-size: inherit;
+  text-decoration: none;
+}
+body {
+  background-color: rgb(29, 29, 29);
+}
+
+ul {
+  list-style: none;
+}
+
+p {
+  margin: 0;
+}
+img {
+  display: block;
+}
