@@ -39,9 +39,15 @@ export default class HomePage extends Component {
         <div className={s.wrapper}>
           <h1>Популярные фильмы:</h1>
           <MoviesList movies={this.state.movies} />
-          <button type="button" onClick={this.handleLoadMore}>
-            ещё
-          </button>
+          {this.state.movies.length > 0 && (
+            <button
+              type="button"
+              className={s.loadMore}
+              onClick={this.handleLoadMore}
+            >
+              Еще...
+            </button>
+          )}
         </div>
       )
     );

@@ -7,3 +7,19 @@
   flex-direction: column;
   justify-content: flex-start;
 }
+
+.loadMore {
+  color: #ffffff;
+  font-size: 16px;
+  border: 0;
+  height: 60px;
+  width: 100%;
+  background: rgba(0, 0, 100, 0.4);
+  transition: all 250ms ease;
+  cursor: pointer;
+}
+
+.loadMore:hover,
+.loadMore:focus {
+  background: rgba(0, 0, 100, 0.8);
+}

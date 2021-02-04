@@ -9,3 +9,11 @@ export async function requestTrendingMovies(page = 1) {
   );
   return data;
 }
+
+export async function requestDetails(movieId) {
+  const { data } = await axios.get(
+    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=ru-RU`,
+  );
+
+  return data;
+}
