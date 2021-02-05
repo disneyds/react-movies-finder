@@ -1,0 +1,26 @@
+.wrapper {
+  padding: 0 20px;
+  width: 100%;
+  background-color: rgb(41, 41, 41);
+}
+.castList {
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+}
+.cast {
+  width: 100px;
+  margin: 15px;
+  background-color: rgb(22, 22, 22);
+}
+.img {
+  width: 100px;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: 700;
+}
+.role {
+  font-size: 12px;
+}

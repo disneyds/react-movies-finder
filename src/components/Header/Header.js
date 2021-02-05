@@ -4,27 +4,44 @@ import logo from './favicon.ico';
 import avatar from './defAvaCir.png';
 import s from './header.module.css';
 import Container from '../Container/Container';
+import paths from '../Routes/paths';
 
 export default function Header() {
   return (
     <header className={s.header}>
       <Container className="Container">
         <div className={s.wrapper}>
-          <Link className={s.logo} to="/">
+          <Link className={s.logo} to={paths.HOME}>
             <img src={logo} alt="logo" className={s.logo} />
           </Link>
 
           <nav className={s.nav}>
             <NavLink
               exact
-              to="/"
+              to={paths.HOME}
               className={s.link}
               activeClassName={s.activLink}
             >
-              Популярные
+              Популярно
             </NavLink>
             <NavLink
-              to="/movies"
+              exact
+              to={paths.FILMS}
+              className={s.link}
+              activeClassName={s.activLink}
+            >
+              Фильмы
+            </NavLink>
+            <NavLink
+              exact
+              to={paths.TV}
+              className={s.link}
+              activeClassName={s.activLink}
+            >
+              Сериалы
+            </NavLink>
+            <NavLink
+              to={paths.MOVIES}
               className={s.link}
               activeClassName={s.activLink}
             >

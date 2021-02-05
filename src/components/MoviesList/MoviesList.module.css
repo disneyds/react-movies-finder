@@ -40,3 +40,12 @@
   transform: translateY(-40px);
   transition: all 250ms ease;
 }
+
+.movieIcon {
+  position: absolute;
+  bottom: 15px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+}

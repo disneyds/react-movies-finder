@@ -23,6 +23,12 @@ export default function MoviesListItem({ movie }) {
             <i className={`material-icons ${s.materialIcons}`}>group</i>
             <span className={s.rating}>{movie.vote_count}</span>
           </div>
+          {movie.media_type === 'movie' ? (
+            <i className={`material-icons ${s.movieIcon}`}>movie</i>
+          ) : null}
+          {movie.media_type === 'tv' ? (
+            <i className={`material-icons ${s.movieIcon}`}>subscriptions</i>
+          ) : null}
         </div>
 
         <p className={s.name}>

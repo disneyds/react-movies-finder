@@ -3,6 +3,8 @@ import React from 'react';
 import paths from './paths';
 
 import HomePage from '../../pages/HomePage/HomePage';
+import MoviesPage from '../../pages/MoviesPage/MoviesPage';
+import Serials from '../../pages/Serials/Serials';
 import MovieDetailsPage from '../../pages/MovieDetailsPage/MovieDetailsPage';
 
 export default function Routes() {
@@ -10,14 +12,17 @@ export default function Routes() {
     <>
       <Switch>
         <Route path={paths.HOME} exact component={HomePage} />
+
         <Route
           path={paths.MOVIES_ID(':movieId')}
-          component={MovieDetailsPage}
+          render={props => <MovieDetailsPage {...props} />}
         />
+
         <Route path={paths.MOVIES} component="" />
 
-        {/* <Route path='/movies/:movieId/cast' component='' />
-                <Route path='/movies/:movieId/reviews' component=''/> */}
+        <Route path={paths.FILMS} component={MoviesPage} />
+
+        <Route path={paths.TV} component={Serials} />
       </Switch>
     </>
   );
