@@ -10,7 +10,7 @@ export async function requestTrendingMovies(page = 1) {
   return data;
 }
 
-export async function requestDetails(movieId, type = 'movie') {
+export async function requestDetails(movieId, type) {
   const { data } = await axios.get(
     `${BASE_URL}/${type}/${movieId}?api_key=${API_KEY}&language=ru-RU&append_to_response=videos&include_image_language=en`,
   );
@@ -32,17 +32,24 @@ export async function requestTV(page = 1) {
   return data;
 }
 
-export async function requestCredits(movieId) {
+export async function requestCredits(movieId, type) {
   const { data } = await axios.get(
-    `${BASE_URL}/movie/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`,
+    `${BASE_URL}/${type}/${movieId}/credits?api_key=${API_KEY}&language=ru-RU`,
   );
 
   return data;
 }
-export async function requestReviews(movieId) {
+export async function requestReviews(movieId, type) {
   const { data } = await axios.get(
-    `${BASE_URL}/movie/${movieId}/reviews?api_key=${API_KEY}`,
+    `${BASE_URL}/${type}/${movieId}/reviews?api_key=${API_KEY}`,
   );
 
+  return data;
+}
+
+export async function requestSearch(query, page = 1) {
+  const { data } = await axios.get(
+    `${BASE_URL}/search/multi?api_key=${API_KEY}&query=${query}&page=${page}&language=ru-RU`,
+  );
   return data;
 }

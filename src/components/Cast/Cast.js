@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { requestCredits } from 'services/API';
 import s from './Cast.module.css';
+import defAvatar from './defAvatar.png';
 
 export default class Cast extends Component {
   state = {
@@ -9,7 +10,8 @@ export default class Cast extends Component {
 
   async componentDidMount() {
     const { movieId } = this.props.match.params;
-    await requestCredits(movieId).then(resp => {
+    const { type } = this.props;
+    await requestCredits(movieId, type).then(resp => {
       console.log(resp);
       this.setState({ casts: resp.cast });
     });
@@ -23,11 +25,16 @@ export default class Cast extends Component {
           {casts.map(cast => {
             return (
               <li className={s.cast} key={cast.cast_id}>
-                <img
-                  src={`https://image.tmdb.org/t/p/w200/${cast.profile_path}`}
-                  alt={cast.name}
-                  className={s.img}
-                />
+                {cast.profile_path ? (
+                  <img
+                    src={`https://image.tmdb.org/t/p/w200/${cast.profile_path}`}
+                    alt={cast.name}
+                    className={s.img}
+                  />
+                ) : (
+                  <img src={defAvatar} alt={cast.name} className={s.img} />
+                )}
+
                 <h3 className={s.name}>{cast.name}</h3>
                 <p className={s.role}>{cast.character}</p>
               </li>

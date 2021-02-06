@@ -1,3 +1,4 @@
+import Loader from 'components/Loader/Loader.js';
 import MoviesList from 'components/MoviesList/MoviesList.js';
 import React, { Component } from 'react';
 import { requestTV } from '../../services/API.js';
@@ -5,13 +6,14 @@ import s from './Serials.module.css';
 export default class Serials extends Component {
   state = {
     movies: [],
-    loading: false,
+    loading: true,
     page: 1,
+    type: 'tv',
   };
   async componentDidMount() {
     await requestTV(this.state.page).then(resp => {
       console.log(resp.results);
-      this.setState({ movies: resp.results });
+      this.setState({ movies: resp.results, loading: false });
     });
   }
 
@@ -34,22 +36,30 @@ export default class Serials extends Component {
   };
 
   render() {
+    const { movies, loading, type } = this.state;
     return (
-      this.state.movies && (
-        <div className={s.wrapper}>
-          <h1>Сериалы:</h1>
-          <MoviesList movies={this.state.movies} />
-          {this.state.movies.length > 0 && (
-            <button
-              type="button"
-              className={s.loadMore}
-              onClick={this.handleLoadMore}
-            >
-              Еще...
-            </button>
-          )}
-        </div>
-      )
+      <>
+        {movies.length > 0 && (
+          <div className={s.wrapper}>
+            <h1>Сериалы:</h1>
+            <MoviesList
+              movies={movies}
+              getType={this.props.getType}
+              type={type}
+            />
+            {movies.length > 0 && (
+              <button
+                type="button"
+                className={s.loadMore}
+                onClick={this.handleLoadMore}
+              >
+                Еще...
+              </button>
+            )}
+          </div>
+        )}
+        {loading && <Loader />}
+      </>
     );
   }
 }

@@ -4,38 +4,40 @@ import Reviews from '../../components/Reviews/Reviews';
 import React, { Component } from 'react';
 import { requestDetails } from '../../services/API.js';
 import { Route, Switch } from 'react-router-dom';
+import Loader from 'components/Loader/Loader';
 
 export default class MovieDetailsPage extends Component {
   state = {
-    movie: [],
-    loading: false,
+    movie: null,
+    loading: true,
   };
   async componentDidMount() {
     const { movieId } = this.props.match.params;
-    await requestDetails(movieId).then(resp => {
+    const { type } = this.props;
+    await requestDetails(movieId, type).then(resp => {
       console.log(resp);
 
-      this.setState({ movie: resp });
+      this.setState({ movie: resp, loading: false });
     });
   }
 
-  handleLoadMore = () => {
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-      loading: true,
-    }));
-  };
-
   render() {
-    const { movie } = this.state;
+    const { movie, loading } = this.state;
     const { match } = this.props;
     console.log(this.props);
     return (
       <>
-        {this.state.movie && <MovieDetails movie={movie} url={match.url} />}
+        {movie && <MovieDetails movie={movie} />}
+        {loading && <Loader />}
         <Switch>
-          <Route path={`${match.path}/casts`} component={Cast} />
-          <Route path={`${match.path}/reviews`} component={Reviews} />
+          <Route
+            path={`${match.path}/casts`}
+            render={props => <Cast {...props} type={this.props.type} />}
+          />
+          <Route
+            path={`${match.path}/reviews`}
+            render={props => <Reviews {...props} type={this.props.type} />}
+          />
         </Switch>
       </>
     );

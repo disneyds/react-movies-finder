@@ -1,10 +1,24 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import s from './MoviesList.module.css';
 
-export default function MoviesListItem({ movie }) {
+const MoviesListItem = ({ movie, getType, type = null, location }) => {
   return (
-    <Link to={`/movies/${movie.id}`}>
+    <Link
+      to={{
+        pathname: `/movies/${movie.id}`,
+        state: {
+          from: location,
+        },
+      }}
+      onClick={() => {
+        if (type) {
+          getType(type);
+        } else {
+          getType(movie.media_type);
+        }
+      }}
+    >
       <li className={s.item}>
         <div className={s.imageBox}>
           <img
@@ -40,4 +54,6 @@ export default function MoviesListItem({ movie }) {
       </li>
     </Link>
   );
-}
+};
+
+export default withRouter(MoviesListItem);
