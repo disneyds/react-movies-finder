@@ -4,11 +4,13 @@ import s from './FindeMovie.module.css';
 import MoviesList from '../../components/MoviesList/MoviesList';
 import Loader from 'components/Loader/Loader';
 import { toast } from 'react-toastify';
+import LoadMoreButton from 'components/LoadMoreButton/LoadMoreButton';
+import SearchForm from 'components/SearchForm/SearchForm';
 
 export default class FindeMovie extends Component {
   state = {
     query: '',
-    page: 1,
+    page: null,
     movies: [],
     loading: false,
   };
@@ -38,17 +40,10 @@ export default class FindeMovie extends Component {
         .finally(this.setState({ loading: false }));
   }
 
-  handleChange = e => {
-    const { value } = e.target;
-    this.setState({
-      query: value,
-    });
-  };
-
-  onSubmitForm = e => {
-    e.preventDefault();
-    const { query } = this.state;
-    this.setState({ loading: true });
+  onSubmitForm = query => {
+    if (query === this.state.query || query === '')
+      return toast.warning('Введите запрос');
+    this.setState({ loading: true, query, page: 1, movies: [] });
     requestSearch(query)
       .then(resp => {
         if (resp.results.length === 0) {
@@ -58,7 +53,6 @@ export default class FindeMovie extends Component {
             query: '',
           });
         } else {
-          console.log(resp);
           this.setState({ movies: resp.results });
         }
       })
@@ -76,36 +70,13 @@ export default class FindeMovie extends Component {
     const { movies, loading } = this.state;
     return (
       <div className={s.wrapper}>
-        <form
-          className={s.searchForm}
-          id="search-form"
-          onSubmit={this.onSubmitForm}
-        >
-          <input
-            className={`${s.formInput} form-control`}
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Найти кино..."
-            onChange={this.handleChange}
-            value={this.state.query}
-          />
-
-          <button className={s.btnSub} type="submit">
-            Найти
-          </button>
-        </form>
-
-        <MoviesList movies={movies} getType={this.props.getType} />
+        <SearchForm onSubmit={this.onSubmitForm} />
 
         {movies.length > 0 && (
-          <button
-            type="button"
-            className={s.loadMore}
-            onClick={this.handleLoadMore}
-          >
-            Еще...
-          </button>
+          <>
+            <MoviesList movies={movies} getType={this.props.getType} />
+            <LoadMoreButton loadMore={this.handleLoadMore} />
+          </>
         )}
         {loading && <Loader />}
       </div>

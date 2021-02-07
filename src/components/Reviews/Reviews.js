@@ -1,6 +1,9 @@
+import paths from 'components/Routes/paths';
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
 import { requestReviews } from 'services/API';
 import s from './Reviews.module.css';
+import ReviewsItem from './ReviewsItem';
 
 export default class Reviews extends Component {
   state = {
@@ -10,31 +13,32 @@ export default class Reviews extends Component {
   async componentDidMount() {
     const { movieId } = this.props.match.params;
     const { type } = this.props;
-    await requestReviews(movieId, type).then(resp => {
-      console.log(resp);
-      this.setState({ reviews: resp.results });
-    });
+    await requestReviews(movieId, type)
+      .then(resp => {
+        this.setState({ reviews: resp.results });
+      })
+      .catch(error => {
+        if (error) {
+          toast.error(`Что-то пошло не так, попробуйте позже`);
+          this.props.history.push(paths.HOME);
+          return;
+        }
+      });
   }
 
   render() {
     const { reviews } = this.state;
+
     return (
       <div className={s.wrapper}>
         <ul className={s.reviewsList}>
           {reviews.length > 0 ? (
-            reviews.map(review => {
-              return (
-                <li className={s.review} key={review.id}>
-                  <div className={s.authorBox}>
-                    <h3 className={s.author}>Автор:</h3>
-                    <p className={s.authorName}>{review.author}</p>
-                  </div>
-                  <p className={s.content}>{review.content}</p>
-                </li>
-              );
-            })
+            reviews.map(review => (
+              <ReviewsItem key={review.id} review={review} />
+            ))
           ) : (
             <h1>Тут пока нет отзывов...</h1>
+            // toast.warning(`Тут пока ничего нет!`)
           )}
         </ul>
       </div>

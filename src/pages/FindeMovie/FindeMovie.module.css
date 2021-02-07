@@ -7,10 +7,3 @@
   flex-direction: column;
   justify-content: flex-start;
 }
-.searchForm {
-  height: 150px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}

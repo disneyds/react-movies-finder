@@ -4,6 +4,7 @@ import s from './MovieDetails.module.css';
 import plus0 from './0-plus-1-48.png';
 import plus18 from './18-plus-2-48.png';
 import paths from 'components/Routes/paths';
+import PropTypes from 'prop-types';
 
 const MovieDetiles = ({ movie, match, history, location }) => {
   const goBack = () => {
@@ -85,14 +86,24 @@ const MovieDetiles = ({ movie, match, history, location }) => {
 
             <nav className={s.nav}>
               <NavLink
-                to={`${match.url}/casts`}
+                to={{
+                  pathname: `${match.url}/casts`,
+                  state: {
+                    from: location,
+                  },
+                }}
                 className={s.link}
                 activeClassName={s.activLink}
               >
                 Актёры
               </NavLink>
               <NavLink
-                to={`${match.url}/reviews`}
+                to={{
+                  pathname: `${match.url}/reviews`,
+                  state: {
+                    from: location,
+                  },
+                }}
                 className={s.link}
                 activeClassName={s.activLink}
               >
@@ -118,3 +129,28 @@ const MovieDetiles = ({ movie, match, history, location }) => {
 };
 
 export default withRouter(MovieDetiles);
+
+MovieDetiles.propTypes = {
+  movie: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    media_type: PropTypes.string,
+    poster_path: PropTypes.string,
+    homepage: PropTypes.string,
+    tagline: PropTypes.string,
+    release_date: PropTypes.string,
+    first_air_date: PropTypes.string,
+    name: PropTypes.string,
+    title: PropTypes.string,
+    original_name: PropTypes.string,
+    original_title: PropTypes.string,
+    vote_average: PropTypes.number,
+    vote_count: PropTypes.number,
+    overview: PropTypes.string,
+    adult: PropTypes.bool,
+    genres: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+      }),
+    ),
+  }).isRequired,
+};

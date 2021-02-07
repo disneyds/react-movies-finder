@@ -1,6 +1,8 @@
 import Loader from 'components/Loader/Loader.js';
+import LoadMoreButton from 'components/LoadMoreButton/LoadMoreButton.js';
 import MoviesList from 'components/MoviesList/MoviesList.js';
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
 import { requestLatestMovies } from '../../services/API.js';
 import s from './MoviesPage.module.css';
 export default class MoviesPage extends Component {
@@ -12,20 +14,31 @@ export default class MoviesPage extends Component {
   };
   async componentDidMount() {
     await requestLatestMovies(this.state.page).then(resp => {
-      console.log(resp.results);
       this.setState({ movies: resp.results, loading: false });
     });
   }
 
   async componentDidUpdate() {
     if (this.state.loading)
-      await requestLatestMovies(this.state.page).then(resp => {
-        console.log(resp.results);
-        this.setState(prevState => ({
-          movies: [...prevState.movies, ...resp.results],
-          loading: false,
-        }));
-      });
+      await requestLatestMovies(this.state.page)
+        .then(resp => {
+          if (resp.results.length === 0) {
+            return toast.error(`Тут больше ничего нет!`);
+          }
+          this.setState(prevState => ({
+            movies: [...prevState.movies, ...resp.results],
+          }));
+        })
+        .catch(error => {
+          if (error) {
+            return toast.error(`Что-то пошло не так, попробуйте позже`);
+          }
+        })
+        .finally(
+          this.setState({
+            loading: false,
+          }),
+        );
   }
 
   handleLoadMore = () => {
@@ -48,13 +61,7 @@ export default class MoviesPage extends Component {
               type={type}
             />
             {movies.length > 0 && (
-              <button
-                type="button"
-                className={s.loadMore}
-                onClick={this.handleLoadMore}
-              >
-                Еще...
-              </button>
+              <LoadMoreButton loadMore={this.handleLoadMore} />
             )}
           </div>
         )}

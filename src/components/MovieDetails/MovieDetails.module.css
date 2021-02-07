@@ -1,6 +1,7 @@
 .wrapper {
   position: relative;
   padding: 0 25px;
+  padding-bottom: 25px;
   width: 100%;
   min-height: 100vh;
   background-color: rgb(41, 41, 41);
@@ -44,6 +45,7 @@
   background-color: rgba(0, 0, 100, 0.8);
 }
 .movieName {
+  max-width: 75%;
   padding: 15px 0;
 }
 

@@ -1,7 +1,9 @@
+import paths from 'components/Routes/paths';
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
 import { requestCredits } from 'services/API';
+import Actor from './Actor';
 import s from './Cast.module.css';
-import defAvatar from './defAvatar.png';
 
 export default class Cast extends Component {
   state = {
@@ -11,77 +13,33 @@ export default class Cast extends Component {
   async componentDidMount() {
     const { movieId } = this.props.match.params;
     const { type } = this.props;
-    await requestCredits(movieId, type).then(resp => {
-      console.log(resp);
-      this.setState({ casts: resp.cast });
-    });
+    await requestCredits(movieId, type)
+      .then(resp => {
+        this.setState({ casts: resp.cast });
+      })
+      .catch(error => {
+        if (error) {
+          toast.error(`Что-то пошло не так, попробуйте позже`);
+          this.props.history.push(paths.HOME);
+          return;
+        }
+      });
   }
 
   render() {
     const { casts } = this.state;
+    console.log(casts);
     return (
       <div className={s.wrapper}>
         <ul className={s.castList}>
-          {casts.map(cast => {
-            return (
-              <li className={s.cast} key={cast.cast_id}>
-                {cast.profile_path ? (
-                  <img
-                    src={`https://image.tmdb.org/t/p/w200/${cast.profile_path}`}
-                    alt={cast.name}
-                    className={s.img}
-                  />
-                ) : (
-                  <img src={defAvatar} alt={cast.name} className={s.img} />
-                )}
-
-                <h3 className={s.name}>{cast.name}</h3>
-                <p className={s.role}>{cast.character}</p>
-              </li>
-            );
-          })}
+          {casts.length > 0 ? (
+            casts.map(cast => <Actor key={cast.id} actor={cast} />)
+          ) : (
+            <h1>У нас нет информации об актёрском составе...</h1>
+            // toast.warning(`У нас нет информации об актёрском составе...`)
+          )}
         </ul>
       </div>
     );
   }
 }
-
-// adult
-// :
-// false
-
-// cast_id
-// :
-// 63
-// character
-// :
-// "Teenage Girl"
-// credit_id
-// :
-// "6014217fbe2d49003ffdb2a7"
-// gender
-// :
-// 1
-// id
-// :
-// 2941461
-// known_for_department
-// :
-// "Acting"
-// name
-// :
-// "Samantha Cormier"
-// order
-// :
-// 30
-// original_name
-// :
-// "Samantha Cormier"
-// popularity
-// :
-// 0.6
-// profile_path
-// :
-// "/mkklBzfS3ZT9LkN9fnjvDTORQK4.jpg"
-// new entry
-// :

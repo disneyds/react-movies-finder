@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 import { requestDetails } from '../../services/API.js';
 import { Route, Switch } from 'react-router-dom';
 import Loader from 'components/Loader/Loader';
+import { toast } from 'react-toastify';
+import paths from 'components/Routes/paths';
 
 export default class MovieDetailsPage extends Component {
   state = {
@@ -14,17 +16,27 @@ export default class MovieDetailsPage extends Component {
   async componentDidMount() {
     const { movieId } = this.props.match.params;
     const { type } = this.props;
-    await requestDetails(movieId, type).then(resp => {
-      console.log(resp);
-
-      this.setState({ movie: resp, loading: false });
-    });
+    await requestDetails(movieId, type)
+      .then(resp => {
+        this.setState({ movie: resp });
+      })
+      .catch(error => {
+        if (error) {
+          toast.error(`Что-то пошло не так, попробуйте позже`);
+          this.props.history.push(paths.HOME);
+          return;
+        }
+      })
+      .finally(
+        this.setState({
+          loading: false,
+        }),
+      );
   }
 
   render() {
     const { movie, loading } = this.state;
     const { match } = this.props;
-    console.log(this.props);
     return (
       <>
         {movie && <MovieDetails movie={movie} />}
