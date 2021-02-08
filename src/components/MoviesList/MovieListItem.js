@@ -4,21 +4,14 @@ import s from './MoviesList.module.css';
 import defaultPoster from './defaultPoster.png';
 import PropTypes from 'prop-types';
 
-const MoviesListItem = ({ movie, getType, type = null, location }) => {
+const MoviesListItem = ({ movie, type, location }) => {
   return (
     <Link
       to={{
-        pathname: `/movies/${movie.id}`,
+        pathname: `/movies/${movie.id}/${movie.media_type || type}`,
         state: {
           from: location,
         },
-      }}
-      onClick={() => {
-        if (type) {
-          getType(type);
-        } else {
-          getType(movie.media_type);
-        }
       }}
     >
       <li className={s.item}>

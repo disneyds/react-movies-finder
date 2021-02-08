@@ -1,5 +1,5 @@
 import Loader from 'components/Loader/Loader';
-import React, { Component, lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import paths from './paths';
@@ -26,59 +26,36 @@ const MovieDetailsPage = lazy(() =>
   ),
 );
 
-export default class Routes extends Component {
-  state = {
-    type: null,
-  };
+export default function Routes() {
+  return (
+    <>
+      <Suspense fallback={<Loader />}>
+        <Switch>
+          <Route
+            path={paths.HOME}
+            exact
+            render={props => <HomePage {...props} />}
+          />
 
-  handleGetType = type => {
-    this.setState({ type });
-  };
+          <Route
+            path={paths.MOVIES_ID(':movieId', ':type')}
+            render={props => <MovieDetailsPage {...props} />}
+          />
 
-  render() {
-    return (
-      <>
-        <Suspense fallback={<Loader />}>
-          <Switch>
-            <Route
-              path={paths.HOME}
-              exact
-              render={props => (
-                <HomePage {...props} getType={this.handleGetType} />
-              )}
-            />
+          <Route
+            path={paths.MOVIES}
+            render={props => <FindeMovie {...props} />}
+          />
 
-            <Route
-              path={paths.MOVIES_ID(':movieId')}
-              render={props => (
-                <MovieDetailsPage {...props} type={this.state.type} />
-              )}
-            />
+          <Route
+            path={paths.FILMS}
+            render={props => <MoviesPage {...props} />}
+          />
 
-            <Route
-              path={paths.MOVIES}
-              render={props => (
-                <FindeMovie {...props} getType={this.handleGetType} />
-              )}
-            />
-
-            <Route
-              path={paths.FILMS}
-              render={props => (
-                <MoviesPage {...props} getType={this.handleGetType} />
-              )}
-            />
-
-            <Route
-              path={paths.TV}
-              render={props => (
-                <Serials {...props} getType={this.handleGetType} />
-              )}
-            />
-            <Redirect to={paths.HOME} />
-          </Switch>
-        </Suspense>
-      </>
-    );
-  }
+          <Route path={paths.TV} render={props => <Serials {...props} />} />
+          <Redirect to={paths.HOME} />
+        </Switch>
+      </Suspense>
+    </>
+  );
 }

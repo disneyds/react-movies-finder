@@ -5,18 +5,11 @@ import PropTypes from 'prop-types';
 
 import s from './MoviesList.module.css';
 
-const MoviesList = ({ movies, getType, type }) => {
+const MoviesList = ({ movies, type }) => {
   return (
     <div className={s.list}>
       {movies.map(movie => {
-        return (
-          <MoviesListItem
-            movie={movie}
-            key={movie.id}
-            getType={getType}
-            type={type}
-          />
-        );
+        return <MoviesListItem movie={movie} key={movie.id} type={type} />;
       })}
     </div>
   );

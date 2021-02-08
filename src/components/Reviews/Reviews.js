@@ -11,8 +11,7 @@ export default class Reviews extends Component {
   };
 
   async componentDidMount() {
-    const { movieId } = this.props.match.params;
-    const { type } = this.props;
+    const { movieId, type } = this.props.match.params;
     await requestReviews(movieId, type)
       .then(resp => {
         this.setState({ reviews: resp.results });

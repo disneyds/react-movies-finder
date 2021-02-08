@@ -14,8 +14,8 @@ export default class MovieDetailsPage extends Component {
     loading: true,
   };
   async componentDidMount() {
-    const { movieId } = this.props.match.params;
-    const { type } = this.props;
+    const { movieId, type } = this.props.match.params;
+
     await requestDetails(movieId, type)
       .then(resp => {
         this.setState({ movie: resp });
@@ -44,11 +44,11 @@ export default class MovieDetailsPage extends Component {
         <Switch>
           <Route
             path={`${match.path}/casts`}
-            render={props => <Cast {...props} type={this.props.type} />}
+            render={props => <Cast {...props} />}
           />
           <Route
             path={`${match.path}/reviews`}
-            render={props => <Reviews {...props} type={this.props.type} />}
+            render={props => <Reviews {...props} />}
           />
         </Switch>
       </>

@@ -11,8 +11,7 @@ export default class Cast extends Component {
   };
 
   async componentDidMount() {
-    const { movieId } = this.props.match.params;
-    const { type } = this.props;
+    const { movieId, type } = this.props.match.params;
     await requestCredits(movieId, type)
       .then(resp => {
         this.setState({ casts: resp.cast });
