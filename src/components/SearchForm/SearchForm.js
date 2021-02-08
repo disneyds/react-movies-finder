@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import s from './SearchForm.module.css';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 export default class SearchForm extends Component {
   state = {
@@ -16,6 +17,7 @@ export default class SearchForm extends Component {
 
   onSubmitForm = e => {
     e.preventDefault();
+    if (this.state.query === '') return toast.warning('Введите запрос');
     this.props.onSubmit(this.state.query);
     this.setState({ query: '' });
   };

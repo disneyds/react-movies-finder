@@ -9,56 +9,64 @@ import SearchForm from 'components/SearchForm/SearchForm';
 
 export default class FindeMovie extends Component {
   state = {
-    query: '',
-    page: null,
+    page: 1,
     movies: [],
     loading: false,
   };
 
-  async componentDidUpdate() {
-    const { query, page } = this.state;
-    if (this.state.loading)
-      await requestSearch(query, page)
-        .then(resp => {
-          if (resp.results.length === 0) {
-            toast.error(`По запросу ${this.state.query} ничего не найдено`);
-            this.setState({
-              loading: false,
-              query: '',
-            });
-          } else {
-            this.setState(prevState => ({
-              movies: [...prevState.movies, ...resp.results],
-            }));
-          }
-        })
-        .catch(error => {
-          if (error) {
-            return toast.error(`Что-то пошло не так, попробуйте позже`);
-          }
-        })
-        .finally(this.setState({ loading: false }));
+  componentDidMount() {
+    const params = this.getSearchQuery(this.props.location.search, 'query');
+    if (params) {
+      this.setState({ loading: true });
+      this.searchMovies(params);
+    }
   }
 
-  onSubmitForm = query => {
-    if (query === this.state.query || query === '')
-      return toast.warning('Введите запрос');
-    this.setState({ loading: true, query, page: 1, movies: [] });
-    requestSearch(query)
+  async componentDidUpdate(prevProps, prevState) {
+    const params = this.getSearchQuery(this.props.location.search, 'query');
+    const prevParams = this.getSearchQuery(prevProps.location.search, 'query');
+    const { page } = this.state;
+    if (params !== prevParams || prevState.page !== page)
+      this.searchMovies(params, page);
+  }
+
+  async searchMovies(query, page) {
+    await requestSearch(query, page)
       .then(resp => {
         if (resp.results.length === 0) {
-          toast.error(`По запросу ${this.state.query} ничего не найдено`);
+          toast.error(`По запросу ${query} ничего не найдено`);
           this.setState({
-            loading: false,
             query: '',
           });
         } else {
-          this.setState({ movies: resp.results });
+          this.setState(prevState => ({
+            movies: [...prevState.movies, ...resp.results],
+          }));
+        }
+      })
+      .catch(error => {
+        if (error) {
+          return toast.error(`Что-то пошло не так, попробуйте позже`);
         }
       })
       .finally(this.setState({ loading: false }));
-  };
+  }
 
+  getSearchQuery(searchString, query) {
+    return new URLSearchParams(searchString).get(query);
+  }
+
+  onSubmitForm = query => {
+    const params = this.getSearchQuery(this.props.location.search, 'query');
+    const { pathname } = this.props.location;
+    if (params !== query && params !== '') {
+      this.props.history.push({
+        pathname,
+        search: `query=${query}`,
+      });
+      this.setState({ movies: [], loading: true });
+    }
+  };
   handleLoadMore = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
@@ -74,7 +82,7 @@ export default class FindeMovie extends Component {
 
         {movies.length > 0 && (
           <>
-            <MoviesList movies={movies} getType={this.props.getType} />
+            <MoviesList movies={movies} />
             <LoadMoreButton loadMore={this.handleLoadMore} />
           </>
         )}
