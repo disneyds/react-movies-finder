@@ -31,28 +31,18 @@ export default function Routes() {
     <>
       <Suspense fallback={<Loader />}>
         <Switch>
-          <Route
-            path={paths.HOME}
-            exact
-            render={props => <HomePage {...props} />}
-          />
+          <Route path={paths.HOME} exact component={HomePage} />
 
           <Route
             path={paths.MOVIES_ID(':movieId', ':type')}
-            render={props => <MovieDetailsPage {...props} />}
+            component={MovieDetailsPage}
           />
 
-          <Route
-            path={paths.MOVIES}
-            render={props => <FindeMovie {...props} />}
-          />
+          <Route path={paths.MOVIES} component={FindeMovie} />
 
-          <Route
-            path={paths.FILMS}
-            render={props => <MoviesPage {...props} />}
-          />
+          <Route path={paths.FILMS} component={MoviesPage} />
 
-          <Route path={paths.TV} render={props => <Serials {...props} />} />
+          <Route path={paths.TV} component={Serials} />
           <Redirect to={paths.HOME} />
         </Switch>
       </Suspense>

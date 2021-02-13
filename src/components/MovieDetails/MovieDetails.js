@@ -110,7 +110,7 @@ const MovieDetiles = ({ movie, match, history, location }) => {
                 Отзывы
               </NavLink>
             </nav>
-            {movie.adult && movie.adult ? (
+            {movie.adult ? (
               <div className={s.adult}>
                 {' '}
                 <img src={plus18} alt="18+" />{' '}

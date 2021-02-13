@@ -5,6 +5,8 @@ import defaultPoster from './defaultPoster.png';
 import PropTypes from 'prop-types';
 
 const MoviesListItem = ({ movie, type, location }) => {
+  const movieName =
+    movie.name || movie.title || movie.original_name || movie.original_title;
   return (
     <Link
       to={{
@@ -20,24 +22,10 @@ const MoviesListItem = ({ movie, type, location }) => {
             <img
               className={s.image}
               src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`}
-              alt={
-                movie.name ||
-                movie.title ||
-                movie.original_name ||
-                movie.original_title
-              }
+              alt={movieName}
             />
           ) : (
-            <img
-              className={s.image}
-              src={defaultPoster}
-              alt={
-                movie.name ||
-                movie.title ||
-                movie.original_name ||
-                movie.original_title
-              }
-            />
+            <img className={s.image} src={defaultPoster} alt={movieName} />
           )}
           <div className={s.overlay}>
             <i className={`material-icons ${s.materialIcons}`}>thumb_up</i>
@@ -53,12 +41,7 @@ const MoviesListItem = ({ movie, type, location }) => {
           ) : null}
         </div>
 
-        <p className={s.name}>
-          {movie.name ||
-            movie.title ||
-            movie.original_name ||
-            movie.original_title}
-        </p>
+        <p className={s.name}>{movieName}</p>
       </li>
     </Link>
   );
